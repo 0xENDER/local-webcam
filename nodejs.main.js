@@ -20,6 +20,7 @@ function createWindow() {
         const win = new BrowserWindow({
             width: 800,
             height: 600,
+            fullscreen: true,
             webPreferences: {
                 preload: path.join(__dirname, 'nodejs.preload.js'), // Important: Use a preload script
                 contextIsolation: true, // Recommended: Enable context isolation
@@ -57,6 +58,8 @@ function startWebSocket(callback) {
         callback();
         return false;
     }
+
+    // signal-host-start
 
     // Start a WebSocket server, and get its local IP address!
     const wss = new WebSocket.Server({ port: WebSocketPort }, () => {
