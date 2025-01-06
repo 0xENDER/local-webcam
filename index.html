@@ -9,6 +9,7 @@
 </head>
 
 <body>
+    <input id="color-picker" type="color" style="display: none;">
     <video id="video" autoplay playsinline style="display: none;"></video>
     <button id="button-out">Start Camera (Out)</button>
     <button id="button-in">Start Camera (In)</button>
@@ -16,6 +17,7 @@
         const video = document.getElementById('video');
         const buttonOut = document.getElementById('button-out');
         const buttonIn = document.getElementById('button-in');
+        const colorPicker = document.getElementById('color-picker');
 
         function showVideoElm(stream, isOut = false) {
             // Change displayed elements
@@ -27,7 +29,13 @@
             video.play();
             // Add a background colour when streaming out!
             if (isOut) {
-                document.documentElement.style.backgroundColor = prompt("Choose (lighting) background colour:");
+                colorPicker.style.display = "block";
+                colorPicker.addEventListener('input', (event) => {
+                    const selectedColor = event.target.value;
+                    console.log("Selected color:", selectedColor);
+                    // Set as document background color
+                    document.documentElement.style.backgroundColor = selectedColor;
+                });
             }
         }
 
@@ -50,7 +58,7 @@
                 document.write("Error: Could not fetch (in) device feed!");
             }
         };
-</script>
+    </script>
 </body>
 
 </html>
