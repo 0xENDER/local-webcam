@@ -51,13 +51,38 @@ ipcMain.handle('get-ws-address', async () => {
     // Simulate fetching data or performing an operation
     return WebSocketAddress;
 });
-ipcMain.handle('close-ws', async () => {
-    // Simulate fetching data or performing an operation
+ipcMain.handle('close-ws-connection', async () => {
+    console.log("Closing WebSocket server...");
+
+    // Check if the variable points to the WS server
+    if(typeof wss.close != "function"){
+        alert("Couldn't find a WebSocket server! Forcing exit...");
+        app.quit();
+    }
+
+    // Iterate through all connected clients
+    wss.clients.forEach(client => {
+        if (client.readyState === WebSocket.OPEN || client.readyState === WebSocket.CLOSING) {
+            try {
+                // Terminate the connection immediately. This does not perform a close handshake
+                client.terminate();
+                console.log("Client terminated");
+            } catch (error) {
+                console.error("Error terminating client:", error);
+                alert("Error terminating WebSocket client! Forcing exit...");
+                app.quit();
+            }
+        }
+    });
+
+    // Close the WebSocket server itself. This will prevent new connections
     wss.close((err) => {
         if (err) {
             console.error("Error closing WebSocket server:", err);
             alert("Error closing WebSocket server! Forcing exit...");
             app.quit();
+        }else{
+            console.log("WebSocket server closed successfully!");
         }
     });
 });
