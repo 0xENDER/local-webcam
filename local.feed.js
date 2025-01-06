@@ -112,10 +112,10 @@ async function startWebRTC(ws, trackCallback, streamOut = false) {
         if (streamOut instanceof MediaStream) { // Determine who initiates the connection
             // Attach out streams to tracks
             streamOut.getTracks().forEach(track => pc.addTrack(track, streamOut));
-            const offer = await pc.createOffer();
-            await pc.setLocalDescription(offer);
-            send(ws, { type: 'offer', sdp: pc.localDescription });
         }
+        const offer = await pc.createOffer();
+        await pc.setLocalDescription(offer);
+        send(ws, { type: 'offer', sdp: pc.localDescription });
     } catch (error) {
         document.writeln('Error accessing media devices!');
         console.error('Error accessing media devices:', error);
