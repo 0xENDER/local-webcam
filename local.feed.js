@@ -61,12 +61,12 @@ async function startWebSocket(callback) {
         const message = JSON.parse(textData);
         console.log("WS: " + message.type, message);
         if (message.type === 'offer') {
-            await pc.setRemoteDescription(new RTCSessionDescription(message));
+            await pc.setRemoteDescription(new RTCSessionDescription(message.sdp));
             const answer = await pc.createAnswer();
             await pc.setLocalDescription(answer);
             send({ type: 'answer', sdp: pc.localDescription });
         } else if (message.type === 'answer') {
-            await pc.setRemoteDescription(new RTCSessionDescription(message));
+            await pc.setRemoteDescription(new RTCSessionDescription(message.sdp));
         } else if (message.type === 'ice-candidate') {
             if (message.candidate) {
                 try {
@@ -112,11 +112,10 @@ async function startWebRTC(ws, trackCallback, streamOut = false) {
         if (streamOut instanceof MediaStream) { // Determine who initiates the connection
             // Attach out streams to tracks
             streamOut.getTracks().forEach(track => pc.addTrack(track, streamOut));
+            const offer = await pc.createOffer();
+            await pc.setLocalDescription(offer);
+            send(ws, { type: 'offer', sdp: pc.localDescription });
         }
-
-        const offer = await pc.createOffer();
-        await pc.setLocalDescription(offer);
-        send(ws, { type: 'offer', sdp: pc.localDescription });
     } catch (error) {
         document.writeln('Error accessing media devices!');
         console.error('Error accessing media devices:', error);
