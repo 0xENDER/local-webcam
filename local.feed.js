@@ -12,9 +12,9 @@ function getDeviceFeed() {
     // Only get Video feed
     const constraints = {
         video: {
-            width: { ideal: 640 },
-            height: { ideal: 480 },
-            frameRate: { ideal: 30 }
+            width: { ideal: 640, max: 1920 },
+            height: { ideal: 480, max: 1080 },
+            frameRate: { ideal: 30, max: 40 }
         },
         audio: false // audio capture is assumed to be handled by a separate device
     };
