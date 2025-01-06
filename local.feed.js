@@ -82,7 +82,6 @@ async function startWebSocket(callback) {
             if (message.candidate) {
                 try {
                     await pc.addIceCandidate(message.candidate);
-                    window.newReceiver();
                 } catch (e) {
                     console.error('Error adding ICE candidate:', e);
                 }
@@ -90,7 +89,8 @@ async function startWebSocket(callback) {
         } else if (message.type === 'signal-new-receiver') {
             window.newReceiver();
         } else if (message.type === 'signal-host-start') {
-            window.hostStart();
+            // Signal that a new receiver has joined
+            send(ws, { type: 'signal-new-receiver' });
         }
     };
 
