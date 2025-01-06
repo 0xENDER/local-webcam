@@ -18,11 +18,13 @@
     <video id="video" autoplay playsinline style="display: none;"></video>
     <button id="button-out">Await Recievers (Out)</button>
     <button id="button-in">Request Camera Feed (In)</button>
+    <button id="button-exit" style="display: none;">Exit</button>
     <script>
         window.isVideoHosting = false;
         const video = document.getElementById('video');
         const buttonOut = document.getElementById('button-out');
         const buttonIn = document.getElementById('button-in');
+        const buttonExit = document.getElementById('button-exit');
         const colorPicker = document.getElementById('color-picker');
 
         // Show video element
@@ -31,6 +33,9 @@
             buttonOut.style.display = "none";
             buttonIn.style.display = "none";
             video.style.display = "block";
+            if(isOut){
+                buttonExit.style.display = "block";
+            }
             // Start video
             video.srcObject = stream;
             video.play();
