@@ -40,7 +40,9 @@ async function startWebSocket(callback) {
         wsAddress = "ws://" + prompt("Choose your WS address: (10.100.102.2:8080, 10.100.102.14:6633, etc.)");
     }
     console.log(wsAddress);
+
     ws = new WebSocket(wsAddress);
+    ws.binaryType = 'arraybuffer';
 
     // Await WS connection
     ws.onopen = () => {
@@ -50,7 +52,9 @@ async function startWebSocket(callback) {
 
     // Check for RTC-related messages
     ws.onmessage = async (event) => {
+        console.log(event);
         console.log(event.data);
+
         const message = JSON.parse(event.data);
         console.log("WS: " + message.type, message);
         if (message.type === 'offer') {

@@ -97,6 +97,7 @@ function startWebSocket(callback) {
             // Broadcast the message to all connected clients
             wss.clients.forEach(client => {
                 if (client !== ws && client.readyState === WebSocket.OPEN) {
+                    console.log("Sending WS message:", message);
                     client.send(message);
                 }
             });
