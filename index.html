@@ -27,9 +27,11 @@
             buttonIn.style.display = "none";
             video.style.display = "block";
             // Start video
-            document.body.style.margin = 0;
             video.srcObject = stream;
             video.play();
+            if(!isOut){
+                document.body.style.margin = 0;
+            }
             // Add a background colour when streaming out!
             if (isOut) {
                 colorPicker.style.display = "block";
