@@ -83,14 +83,14 @@
             buttonOut.disabled = true;
             buttonIn.disabled = false;
         }
-        window.newReceiver = function () {
+        window.newReceiver = function (clientsCount) {
             if (window.nodejsWebcamHost) {
                 if(window.isVideoHosting){
                     window.pc.close(); // close webcam connection
                     window.nodejsWebcamHost.closeWS(); // close websocket connection
                     document.writeln("Security Alert: Suspecting an unauthorised receiver!");
                 }else{
-                    buttonOut.innerHTML = "Start Camera Feed (Out)";
+                    buttonOut.innerHTML = `Start Camera Feed (${clientsCount - 1} receiver)`;
                     buttonOut.disabled = false;
                 }
             }

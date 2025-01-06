@@ -95,8 +95,6 @@ function startWebSocket(callback) {
         return false;
     }
 
-    // signal-host-start
-
     // Start a WebSocket server, and get its local IP address!
     wss = new WebSocket.Server({ port: WebSocketPort }, () => {
         const networkInterfaces = os.networkInterfaces();
@@ -107,7 +105,9 @@ function startWebSocket(callback) {
             for (const iface of networkInterfaces[name]) {
                 // Skip over non-IPv4 and internal (loopback) addresses
                 if (iface.family === 'IPv4' && !iface.internal) {
-                    localAddress = iface.address;
+                    if(iface.address.indexOf("172.26.") != 0){
+                        localAddress = iface.address;
+                    }
                     break; // Found an external IPv4 address
                 }
             }
@@ -137,7 +137,12 @@ function startWebSocket(callback) {
             wss.clients.forEach(client => {
                 if (client !== ws && client.readyState === WebSocket.OPEN) {
                     console.log("Sending WS message:", message);
-                    client.send(message);
+                    // Include the number of connected clients in the message
+                    const json = JSON.parse(message.toString('utf-8'));
+                    client.send(Buffer.from(JSON.stringify({
+                        clientsCount: wss.clients.size,
+                        ...json
+                    })));
                 }
             });
         });

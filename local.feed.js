@@ -61,9 +61,6 @@ async function startWebSocket(callback) {
     // Check for RTC-related messages
     const decoder = new TextDecoder();
     ws.onmessage = async (event) => {
-        console.log(event);
-        console.log(event.data);
-
         // decode the message
         const textData = await decoder.decode(event.data);
         const message = JSON.parse(textData);
@@ -84,7 +81,7 @@ async function startWebSocket(callback) {
                 }
             }
         } else if (message.type === 'signal-new-receiver') {
-            window.newReceiver();
+            window.newReceiver(message.clientsCount);
         } else if (message.type === 'signal-host-start') {
             // Signal that a new receiver has joined
             send(ws, { type: 'signal-new-receiver' });
