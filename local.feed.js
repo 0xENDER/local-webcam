@@ -89,6 +89,8 @@ async function startWebSocket(callback) {
             }
         } else if (message.type === 'signal-new-receiver') {
             window.newReceiver();
+        } else if (message.type === 'signal-host-start') {
+            window.hostStart();
         }
     };
 
