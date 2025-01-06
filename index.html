@@ -46,9 +46,7 @@
             if (stream instanceof MediaStream) {
                 showVideoElm(stream, true);
                 startWebSocket(function (ws) {
-                    startWebRTC(ws, function (streamIn) {
-                        // video.srcObject = streamIn;
-                    });
+                    startWebRTC(ws, function (streamIn) {}, stream);
                 });
             } else {
                 document.writeln("Error: Could not fetch (out) device feed!");

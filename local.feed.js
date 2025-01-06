@@ -114,6 +114,7 @@ async function startWebRTC(ws, trackCallback, streamOut = false) {
 
     try {
         if (streamOut instanceof MediaStream) { // Determine who initiates the connection
+            console.log("Attempting to send a stream...");
             // Attach out streams to tracks
             streamOut.getTracks().forEach(track => pc.addTrack(track, streamOut));
             const offer = await pc.createOffer();
