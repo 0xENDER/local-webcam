@@ -9,3 +9,10 @@ You need to run the ElectronJS app in order to start a WS host and send your fee
 ## Receiver
 
 Just open the `index.html` file in your browser!
+
+> [!IMPORTANT]
+> If you're using OBS, make sure to edit the `index.html` file!
+>
+> ![index.html](./github/code.png)
+>
+> ![new index.html](./github/code-edited.png)

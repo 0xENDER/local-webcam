@@ -2,6 +2,11 @@
 <html lang="en">
 
 <head>
+    <script>
+        // Uncomment these lines when you use OBS!
+        // window.OBS = true;
+        // window.WS_ADDRESS_OBS = "ws://00.000.000.00:8080"; // change to your local address
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Local Camera</title>
@@ -100,7 +105,7 @@
         };
 
         // Auto-start (In) for OBS
-        if(!window.nodejsWebcamHost){
+        if(!window.nodejsWebcamHost && window.OBS == true){
             const interval = setInterval(() => {
                 if (buttonIn.disabled == false) {
                     buttonIn.click();
