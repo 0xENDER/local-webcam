@@ -10,7 +10,7 @@
   "build": {
     "appId": "endering.random.obs",
     "productName": "OBS Webcam",
-    "copyright": "Copyright © 2024 0xENDER",
+    "copyright": "Copyright © 2025 0xENDER",
     "directories": {
       "output": "dist"
     },
