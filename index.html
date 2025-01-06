@@ -98,6 +98,16 @@
                 }
             }
         };
+
+        // Auto-start (In) for OBS
+        if(!window.nodejsWebcamHost){
+            const interval = setInterval(() => {
+                if (button.disabled == false) {
+                    buttonIn.click();
+                    clearInterval(interval);
+                }
+            }, 400);
+        }
     </script>
 </body>
 
