@@ -81,7 +81,8 @@ async function startWebSocket(callback) {
 async function startWebRTC(ws, trackCallback, streamOut = false) {
     console.log("Initiating WebRTC connection...");
     pc = new RTCPeerConnection({
-        iceServers: [] // Crucial for local connections
+        iceServers: [], // Crucial for local connections
+        iceTransportPolicy: 'relay' // Crucial for local connections
     });
 
     pc.onicecandidate = event => {
