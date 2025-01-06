@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Camera</title>
+    <script type="text/javascript" src="./index.js"></script>
+</head>
+<body>
+    <video id="video" autoplay playsinline style="display: none;"></video>
+    <button id="button">Start Camera</button>
+    <script>
+        const video = document.getElementById('video');
+        const button = document.getElementById('button');
+
+        // Start!
+        button.onclick = async () => {
+            const stream = await getDeviceFeed();
+            if (stream instanceof MediaStream) {
+                // Change displayed elements
+                button.style.display = "none";
+                video.style.display = "block";
+                // Start video
+                video.srcObject = stream;
+                video.play();
+            } else {
+                document.write("Error: Could not fetch device feed!");
+            }
+        };
+    </script>
+</body>
+</html>
