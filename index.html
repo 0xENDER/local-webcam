@@ -11,7 +11,7 @@
 <body>
     <input id="color-picker" type="color" style="display: none;">
     <video id="video" autoplay playsinline style="display: none;"></video>
-    <button id="button-out">Start Camera (Out)</button>
+    <button id="button-out">Await Recievers (Out)</button>
     <button id="button-in">Request Camera Feed (In)</button>
     <script>
         const video = document.getElementById('video');
@@ -41,15 +41,25 @@
         }
 
         // Start (Out)!
+        let expectingVisitors = false;
         buttonOut.onclick = async () => {
-            const stream = await getDeviceFeed();
-            if (stream instanceof MediaStream) {
-                showVideoElm(stream, true);
+            if (!expectingVisitors) {
+                // Start recieving visitors!
                 startWebSocket(function (ws) {
-                    startWebRTC(ws, function (streamIn) {}, stream);
+                    expectingVisitors = true;
+                    buttonOut.innerText = "Awaiting Receivers...";
+                    buttonIn.disabled = true;
                 });
             } else {
-                document.writeln("Error: Could not fetch (out) device feed!");
+                const stream = await getDeviceFeed();
+                if (stream instanceof MediaStream) {
+                    showVideoElm(stream, true);
+                    startWebSocket(function (ws) {
+                        startWebRTC(ws, function (streamIn) { }, stream);
+                    });
+                } else {
+                    document.writeln("Error: Could not fetch (out) device feed!");
+                }
             }
         };
 
@@ -68,8 +78,9 @@
         if (window.nodejsWebcamHost) {
             buttonOut.disabled = true;
             buttonIn.disabled = true;
-            window.newReceiver = function(){
-                if(window.nodejsWebcamHost){
+            window.newReceiver = function () {
+                if (window.nodejsWebcamHost) {
+                    buttonOut.innerHTML = "Start Camera Feed (Out)";
                     buttonOut.disabled = false;
                 }
             };
