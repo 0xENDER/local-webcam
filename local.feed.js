@@ -50,6 +50,7 @@ async function startWebSocket(callback) {
 
     // Check for RTC-related messages
     ws.onmessage = async (event) => {
+        console.log(event.data);
         const message = JSON.parse(event.data);
         console.log("WS: " + message.type, message);
         if (message.type === 'offer') {
@@ -118,5 +119,7 @@ async function startWebRTC(ws, trackCallback, streamOut = false) {
 // Send WS messages
 function send(ws, message) {
     console.log("Sending WS message:", message);
+    const msg = JSON.stringify(message);
+    console.log("Sending WS message:", msg);
     ws.send(JSON.stringify(message));
 }
