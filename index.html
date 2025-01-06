@@ -1,33 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Local Camera</title>
     <script type="text/javascript" src="local.feed.js"></script>
-    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <video id="video" autoplay playsinline style="display: none;"></video>
-    <button id="button">Start Camera</button>
+    <button id="button-out">Start Camera (Out)</button>
+    <button id="button-in">Start Camera (In)</button>
     <script>
         const video = document.getElementById('video');
-        const button = document.getElementById('button');
+        const buttonOut = document.getElementById('button-out');
+        const buttonIn = document.getElementById('button-in');
 
-        // Start!
-        button.onclick = async () => {
+        function showVideoElm(stream, isOut = false) {
+            // Change displayed elements
+            buttonOut.style.display = "none";
+            buttonIn.style.display = "none";
+            video.style.display = "block";
+            // Start video
+            video.srcObject = stream;
+            video.play();
+            // Add a background colour when streaming out!
+            if (isOut) {
+                document.documentElement.style.backgroundColor = prompt("Choose (lighting) background colour:");
+            }
+        }
+
+        // Start (Out)!
+        buttonOut.onclick = async () => {
             const stream = await getDeviceFeed();
             if (stream instanceof MediaStream) {
-                // Change displayed elements
-                button.style.display = "none";
-                video.style.display = "block";
-                // Start video
-                video.srcObject = stream;
-                video.play();
+                showVideoElm(stream, true);
             } else {
-                document.write("Error: Could not fetch device feed!");
+                document.write("Error: Could not fetch (out) device feed!");
             }
         };
-    </script>
+
+        // Start (In)!
+        buttonIn.onclick = async () => {
+            const stream = await getDeviceFeed();
+            if (stream instanceof MediaStream) {
+                showVideoElm(stream, false);
+            } else {
+                document.write("Error: Could not fetch (in) device feed!");
+            }
+        };
+</script>
 </body>
+
 </html>
