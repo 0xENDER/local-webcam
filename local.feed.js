@@ -33,6 +33,9 @@ function getDeviceFeed() {
     })
 }
 
+// RTC variables
+let pc;
+
 // Start a WebSocket
 async function startWebSocket(callback) {
     // Ask user for their new WebSocket address
@@ -79,6 +82,7 @@ async function startWebSocket(callback) {
             if (message.candidate) {
                 try {
                     await pc.addIceCandidate(message.candidate);
+                    window.newReceiver();
                 } catch (e) {
                     console.error('Error adding ICE candidate:', e);
                 }
