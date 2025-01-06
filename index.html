@@ -12,7 +12,7 @@
     <input id="color-picker" type="color" style="display: none;">
     <video id="video" autoplay playsinline style="display: none;"></video>
     <button id="button-out">Start Camera (Out)</button>
-    <button id="button-in">Start Camera (In)</button>
+    <button id="button-in">Request Camera Feed (In)</button>
     <script>
         const video = document.getElementById('video');
         const buttonOut = document.getElementById('button-out');
@@ -55,6 +55,8 @@
 
         // Start (In)!
         buttonIn.onclick = async () => {
+            buttonIn.disabled = true;
+            buttonIn.innerText = "Awaiting Camera...";
             startWebSocket(function (ws) {
                 startWebRTC(ws, function (streamIn) {
                     showVideoElm(streamIn, false);
