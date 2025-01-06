@@ -64,8 +64,13 @@
 
         // Only allow electron users to stream out!
         if (window.nodejsWebcamHost) {
-            buttonOut.disabled = false;
+            buttonOut.disabled = true;
             buttonIn.disabled = true;
+            window.newReceiver = function(){
+                if(window.nodejsWebcamHost){
+                    buttonOut.disabled = false;
+                }
+            };
         } else {
             buttonOut.disabled = true;
             buttonIn.disabled = false;
