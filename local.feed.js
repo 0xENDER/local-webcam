@@ -47,7 +47,11 @@ async function startWebSocket(callback) {
     // Await WS connection
     ws.onopen = () => {
         console.log('WebSocket connected');
-        callback(ws);
+        if(ws instanceof WebSocket){
+            callback(ws);
+        }else{
+            document.writeln("Error: Couldn't get a valid WebSocket object.");
+        }
     };
 
     // Check for RTC-related messages
@@ -64,7 +68,7 @@ async function startWebSocket(callback) {
             await pc.setRemoteDescription(new RTCSessionDescription(message.sdp));
             const answer = await pc.createAnswer();
             await pc.setLocalDescription(answer);
-            send({ type: 'answer', sdp: pc.localDescription });
+            send(ws, { type: 'answer', sdp: pc.localDescription });
         } else if (message.type === 'answer') {
             await pc.setRemoteDescription(new RTCSessionDescription(message.sdp));
         } else if (message.type === 'ice-candidate') {
