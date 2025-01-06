@@ -28,9 +28,13 @@
         const colorPicker = document.getElementById('color-picker');
 
         function report(...args){
-            document.documentElement.style.backgroundColor = "red";
-            document.documentElement.style.color = "black";
             document.writeln(...args);
+            document.documentElement.style.backgroundColor = "red";
+            document.documentElement.style.color = "blue";
+            document.documentElement.style.fontSize = "26px";
+            document.body.style.backgroundColor = "red";
+            document.body.style.color = "blue";
+            document.body.style.fontSize = "26px";
         }
 
         // Show video element
