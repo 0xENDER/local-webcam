@@ -51,6 +51,7 @@ async function startWebSocket(callback) {
     // Check for RTC-related messages
     ws.onmessage = async (event) => {
         const message = JSON.parse(event.data);
+        console.log("WS: " + message.type, message);
         if (message.type === 'offer') {
             await pc.setRemoteDescription(new RTCSessionDescription(message));
             const answer = await pc.createAnswer();
