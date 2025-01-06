@@ -51,11 +51,14 @@ async function startWebSocket(callback) {
     };
 
     // Check for RTC-related messages
+    const decoder = new TextDecoder();
     ws.onmessage = async (event) => {
         console.log(event);
         console.log(event.data);
 
-        const message = JSON.parse(event.data);
+        // decode the message
+        const textData = await decoder.decode(event.data);
+        const message = JSON.parse(textData);
         console.log("WS: " + message.type, message);
         if (message.type === 'offer') {
             await pc.setRemoteDescription(new RTCSessionDescription(message));
