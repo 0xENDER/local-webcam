@@ -56,7 +56,7 @@ async function startWebSocket(callback) {
         if (ws instanceof WebSocket) {
             callback(ws);
         } else {
-            document.writeln("Error: Couldn't get a valid WebSocket object.");
+            report("Error: Couldn't get a valid WebSocket object.");
         }
     };
 
@@ -93,7 +93,7 @@ async function startWebSocket(callback) {
     // Await WS disconnection
     ws.onclose = () => {
         console.log('WebSocket disconnected');
-        document.writeln("Error: WebSocket disconnected.");
+        report("Error: WebSocket disconnected.");
     }
 }
 
@@ -134,7 +134,7 @@ async function startWebRTC(ws, trackCallback, streamOut = false) {
             send(ws, { type: 'offer', sdp: window.pc.localDescription });
         }
     } catch (error) {
-        document.writeln('Error accessing media devices!');
+        report('Error accessing media devices!');
         console.error('Error accessing media devices:', error);
     }
 }

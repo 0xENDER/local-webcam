@@ -27,6 +27,12 @@
         const buttonExit = document.getElementById('button-exit');
         const colorPicker = document.getElementById('color-picker');
 
+        function report(...args){
+            document.documentElement.style.backgroundColor = "red";
+            document.documentElement.style.color = "black";
+            document.writeln(...args);
+        }
+
         // Show video element
         function showVideoElm(stream, isOut = false) {
             // Change displayed elements
@@ -72,7 +78,7 @@
                     showVideoElm(stream, true);
                     startWebRTC(ws, function (streamIn) { }, stream);
                 } else {
-                    document.writeln("Error: Could not fetch (out) device feed!");
+                    report("Error: Could not fetch (out) device feed!");
                 }
             }
         };
@@ -101,7 +107,7 @@
                 if(window.isVideoHosting){
                     window.pc.close(); // close webcam connection
                     window.nodejsWebcamHost.closeWS(); // close websocket connection
-                    document.writeln("Security Alert: Suspecting an unauthorised receiver!");
+                    report("Security Alert: Suspecting an unauthorised receiver!");
                 }else{
                     buttonOut.innerHTML = `Start Camera Feed (${clientsCount - 1} receiver)`;
                     buttonOut.disabled = false;
