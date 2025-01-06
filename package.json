@@ -33,6 +33,7 @@
     }
   },
   "author": "0xENDER",
+  "email": "admin@ender.ing",
   "license": "MIT",
   "devDependencies": {
     "electron": "^33.2.1",
