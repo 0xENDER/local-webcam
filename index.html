@@ -19,6 +19,7 @@
         const buttonIn = document.getElementById('button-in');
         const colorPicker = document.getElementById('color-picker');
 
+        // Show video element
         function showVideoElm(stream, isOut = false) {
             // Change displayed elements
             buttonOut.style.display = "none";
@@ -44,20 +45,33 @@
             const stream = await getDeviceFeed();
             if (stream instanceof MediaStream) {
                 showVideoElm(stream, true);
+                startWebSocket(function (ws) {
+                    startWebRTC(ws, function (streamIn) {
+                        // video.srcObject = streamIn;
+                    });
+                });
             } else {
-                document.write("Error: Could not fetch (out) device feed!");
+                document.writeln("Error: Could not fetch (out) device feed!");
             }
         };
 
         // Start (In)!
         buttonIn.onclick = async () => {
-            const stream = await getDeviceFeed();
-            if (stream instanceof MediaStream) {
-                showVideoElm(stream, false);
-            } else {
-                document.write("Error: Could not fetch (in) device feed!");
-            }
+            startWebSocket(function (ws) {
+                startWebRTC(ws, function (streamIn) {
+                    showVideoElm(streamIn, false);
+                });
+            });
         };
+
+        // Only allow electron users to stream out!
+        if (window.nodejsWebcamHost) {
+            buttonOut.disabled = false;
+            buttonIn.disabled = true;
+        } else {
+            buttonOut.disabled = true;
+            buttonIn.disabled = false;
+        }
     </script>
 </body>
 

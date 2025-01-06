@@ -1,0 +1,18 @@
+{
+  "name": "local-webcam",
+  "version": "0.0.1",
+  "description": "Hello World!",
+  "main": "nodejs.main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "0xENDER",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^33.2.1"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}
