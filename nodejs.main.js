@@ -47,8 +47,10 @@ app.on('window-all-closed', function () {
 
 // Handle IPC requests
 let wss;
+ipcMain.handle('close-app', async () => {
+    app.quit();
+});
 ipcMain.handle('get-ws-address', async () => {
-    // Simulate fetching data or performing an operation
     return WebSocketAddress;
 });
 ipcMain.handle('close-ws-connection', async () => {

@@ -102,6 +102,12 @@
         if (window.nodejsWebcamHost) {
             buttonOut.disabled = false;
             buttonIn.disabled = true;
+
+            // Exit button
+            buttonExit.onclick = () => {
+                window.pc.close(); // close webcam connection
+                window.nodejsWebcamHost.closeApp(); // close websocket connection
+            };
         } else {
             buttonOut.disabled = true;
             buttonIn.disabled = false;

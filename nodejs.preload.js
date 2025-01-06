@@ -9,5 +9,6 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('nodejsWebcamHost', {
     wsAddress: async () => ipcRenderer.invoke('get-ws-address'),
-    closeWS: async () => ipcRenderer.invoke('close-ws-connection')
+    closeWS: async () => ipcRenderer.invoke('close-ws-connection'),
+    closeApp: async () => ipcRenderer.invoke('close-app')
 });
