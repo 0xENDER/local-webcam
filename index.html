@@ -14,6 +14,7 @@
     <button id="button-out">Await Recievers (Out)</button>
     <button id="button-in">Request Camera Feed (In)</button>
     <script>
+        window.isVideoHosting = false;
         const video = document.getElementById('video');
         const buttonOut = document.getElementById('button-out');
         const buttonIn = document.getElementById('button-in');
@@ -84,8 +85,14 @@
         }
         window.newReceiver = function () {
             if (window.nodejsWebcamHost) {
-                buttonOut.innerHTML = "Start Camera Feed (Out)";
-                buttonOut.disabled = false;
+                if(window.isVideoHosting){
+                    window.pc.close(); // close webcam connection
+                    window.nodejsWebcamHost.closeWS(); // close websocket connection
+                    document.writeln("Security Alert: Suspecting an unauthorised receiver!");
+                }else{
+                    buttonOut.innerHTML = "Start Camera Feed (Out)";
+                    buttonOut.disabled = false;
+                }
             }
         };
     </script>

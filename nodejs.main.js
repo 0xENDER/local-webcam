@@ -46,9 +46,20 @@ app.on('window-all-closed', function () {
 });
 
 // Handle IPC requests
+let wss;
 ipcMain.handle('get-ws-address', async () => {
     // Simulate fetching data or performing an operation
     return WebSocketAddress;
+});
+ipcMain.handle('close-ws', async () => {
+    // Simulate fetching data or performing an operation
+    wss.close((err) => {
+        if (err) {
+            console.error("Error closing WebSocket server:", err);
+            alert("Error closing WebSocket server! Forcing exit...");
+            app.quit();
+        }
+    });
 });
 
 // Start a WebSocket server
@@ -62,7 +73,7 @@ function startWebSocket(callback) {
     // signal-host-start
 
     // Start a WebSocket server, and get its local IP address!
-    const wss = new WebSocket.Server({ port: WebSocketPort }, () => {
+    wss = new WebSocket.Server({ port: WebSocketPort }, () => {
         const networkInterfaces = os.networkInterfaces();
         let localAddress;
 

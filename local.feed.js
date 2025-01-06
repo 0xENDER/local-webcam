@@ -33,9 +33,6 @@ function getDeviceFeed() {
     })
 }
 
-// RTC variables
-let pc;
-
 // Start a WebSocket
 async function startWebSocket(callback) {
     // Ask user for their new WebSocket address
@@ -72,16 +69,16 @@ async function startWebSocket(callback) {
         const message = JSON.parse(textData);
         console.log("WS: " + message.type, message);
         if (message.type === 'offer') {
-            await pc.setRemoteDescription(new RTCSessionDescription(message.sdp));
-            const answer = await pc.createAnswer();
-            await pc.setLocalDescription(answer);
-            send(ws, { type: 'answer', sdp: pc.localDescription });
+            await window.pc.setRemoteDescription(new RTCSessionDescription(message.sdp));
+            const answer = await window.pc.createAnswer();
+            await window.pc.setLocalDescription(answer);
+            send(ws, { type: 'answer', sdp: window.pc.localDescription });
         } else if (message.type === 'answer') {
-            await pc.setRemoteDescription(new RTCSessionDescription(message.sdp));
+            await window.pc.setRemoteDescription(new RTCSessionDescription(message.sdp));
         } else if (message.type === 'ice-candidate') {
             if (message.candidate) {
                 try {
-                    await pc.addIceCandidate(message.candidate);
+                    await window.pc.addIceCandidate(message.candidate);
                 } catch (e) {
                     console.error('Error adding ICE candidate:', e);
                 }
@@ -104,25 +101,25 @@ async function startWebSocket(callback) {
 // Start a WebRTC connection
 async function startWebRTC(ws, trackCallback, streamOut = false) {
     console.log("Initiating WebRTC connection...");
-    pc = new RTCPeerConnection({
+    window.pc = new RTCPeerConnection({
         iceServers: [] // Crucial for local connections
     });
 
     // Signal that a new receiver has joined
     send(ws, { type: 'signal-new-receiver' });
 
-    pc.onicecandidate = event => {
+    window.pc.onicecandidate = event => {
         console.log('Got a candidate...');
         if (event.candidate) {
             send(ws, { type: 'ice-candidate', candidate: event.candidate });
         }
     };
 
-    pc.oniceconnectionstatechange = e => {
-        console.log("ICE connection state: " + pc.iceConnectionState);
+    window.pc.oniceconnectionstatechange = e => {
+        console.log("ICE connection state: " + window.pc.iceConnectionState);
     }
 
-    pc.ontrack = event => {
+    window.pc.ontrack = event => {
         console.log('Got a remote track...');
         trackCallback(event.streams[0]);
     };
@@ -130,11 +127,12 @@ async function startWebRTC(ws, trackCallback, streamOut = false) {
     try {
         if (streamOut instanceof MediaStream) { // Determine who initiates the connection
             console.log("Attempting to send a stream...");
+            window.isVideoHosting = true;
             // Attach out streams to tracks
-            streamOut.getTracks().forEach(track => pc.addTrack(track, streamOut));
-            const offer = await pc.createOffer();
-            await pc.setLocalDescription(offer);
-            send(ws, { type: 'offer', sdp: pc.localDescription });
+            streamOut.getTracks().forEach(track => window.pc.addTrack(track, streamOut));
+            const offer = await window.pc.createOffer();
+            await window.pc.setLocalDescription(offer);
+            send(ws, { type: 'offer', sdp: window.pc.localDescription });
         }
     } catch (error) {
         document.writeln('Error accessing media devices!');
