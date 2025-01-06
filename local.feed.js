@@ -87,6 +87,8 @@ async function startWebSocket(callback) {
                     console.error('Error adding ICE candidate:', e);
                 }
             }
+        } else if (message.type === 'signal-new-receiver') {
+            window.newReceiver();
         }
     };
 
@@ -103,6 +105,9 @@ async function startWebRTC(ws, trackCallback, streamOut = false) {
     pc = new RTCPeerConnection({
         iceServers: [] // Crucial for local connections
     });
+
+    // Signal that a new receiver has joined
+    send(ws, { type: 'signal-new-receiver' });
 
     pc.onicecandidate = event => {
         console.log('Got a candidate...');
