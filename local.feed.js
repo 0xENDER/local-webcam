@@ -11,8 +11,12 @@
 function getDeviceFeed() {
     // Only get Video feed
     const constraints = {
-        'video': true,
-        'audio': false // audio capture is assumed to be handled by a separate device
+        video: {
+            width: { ideal: 640 },
+            height: { ideal: 480 },
+            frameRate: { ideal: 30 }
+        },
+        audio: false // audio capture is assumed to be handled by a separate device
     };
 
     // Return a promise for the media device
@@ -47,9 +51,9 @@ async function startWebSocket(callback) {
     // Await WS connection
     ws.onopen = () => {
         console.log('WebSocket connected');
-        if(ws instanceof WebSocket){
+        if (ws instanceof WebSocket) {
             callback(ws);
-        }else{
+        } else {
             document.writeln("Error: Couldn't get a valid WebSocket object.");
         }
     };
@@ -119,7 +123,7 @@ async function startWebRTC(ws, trackCallback, streamOut = false) {
             streamOut.getTracks().forEach(track => pc.addTrack(track, streamOut));
             const offer = await pc.createOffer();
             await pc.setLocalDescription(offer);
-            send(ws, { type: 'offer', sdp: pc.localDescription });    
+            send(ws, { type: 'offer', sdp: pc.localDescription });
         }
     } catch (error) {
         document.writeln('Error accessing media devices!');
