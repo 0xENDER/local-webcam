@@ -79,11 +79,13 @@ async function startWebSocket(callback) {
 
 // Start a WebRTC connection
 async function startWebRTC(ws, trackCallback, streamOut = false) {
+    console.log("Initiating WebRTC connection...");
     pc = new RTCPeerConnection({
         iceServers: [] // Crucial for local connections
     });
 
     pc.onicecandidate = event => {
+        console.log('Got a candidate...');
         if (event.candidate) {
             send(ws, { type: 'ice-candidate', candidate: event.candidate });
         }
@@ -94,6 +96,7 @@ async function startWebRTC(ws, trackCallback, streamOut = false) {
     }
 
     pc.ontrack = event => {
+        console.log('Got a remote track...');
         trackCallback(event.streams[0]);
     };
 
@@ -107,11 +110,13 @@ async function startWebRTC(ws, trackCallback, streamOut = false) {
             send(ws, { type: 'offer', sdp: pc.localDescription });
         }
     } catch (error) {
+        document.writeln('Error accessing media devices!');
         console.error('Error accessing media devices:', error);
     }
 }
 
 // Send WS messages
 function send(ws, message) {
+    console.log("Sending WS message:", message);
     ws.send(JSON.stringify(message));
 }
