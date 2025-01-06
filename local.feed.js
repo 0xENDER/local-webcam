@@ -40,6 +40,8 @@ async function startWebSocket(callback) {
     if (window.nodejsWebcamHost && await window.nodejsWebcamHost.wsAddress() != "!") {
         wsAddress = await window.nodejsWebcamHost.wsAddress();
         alert("The Host WebSocket address is: " + wsAddress);
+    } else if(window.OBS == true) {
+        wsAddress = window.WS_ADDRESS_OBS;
     } else {
         wsAddress = "ws://" + prompt("Choose your WS address: (10.100.102.2:8080, 10.100.102.14:6633, etc.)");
     }
